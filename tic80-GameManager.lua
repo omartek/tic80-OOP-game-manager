@@ -6,9 +6,14 @@
 -- version: 0.1
 -- script:  lua
 
---[[  CLASS MODULE imported using Amalg tool
-Copyright (c) 2010-2013 Matthias Richter
+--[[ PART 1 -
+     CLASS DEFINITION
+     class.lua MODULE by M.Richter imported using Amalg tool
+     LEAVE AS IT, CODING NOT NEEDED
+]]--
 
+--[[
+Copyright (c) 2010-2013 Matthias Richter
 taken from https://github.com/vrld/hump
 see https://youtu.be/GfwpRU0cT10?t=2794 for usage
 see https://youtu.be/3IdOCxHGMIo?t=6239 for usage like game manager (state machine)
@@ -22,18 +27,6 @@ furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
-
-Except as contained in this notice, the name(s) of the above copyright holders
-shall not be used in advertising or otherwise to promote the sale, use or
-other dealings in this Software without prior written authorization.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
 ]]--
 
 do
@@ -114,11 +107,12 @@ return setmetatable({new = new, include = include, clone = clone},
 	{__call = function(_,...) return new(...) end})
 end
 end
--- END class.lua MODULE
+-- END MODULE class.lua
 
 Class = require 'class' -- import module above for usage
 
 -- state machine object definition
+-- LEAVE AS IT, CODING NOT NEEDED
 
 StateMachine = Class{}
 
@@ -148,9 +142,10 @@ function StateMachine:render()
 	self.current:render()  -- when called executes update function of the selected game state
 end
 
--- game state functions definition
+--[[ PART 2 -
+     GAME STATE CLASS DEFINITION ]]--
 
-BaseState = Class{} -- base empty class
+BaseState = Class{} -- base empty class LEAVE AS IT, CODING NOT NEEDED
 
 function BaseState:init() end
 function BaseState:enter() end
@@ -158,6 +153,10 @@ function BaseState:exit() end
 function BaseState:update() end
 function BaseState:render() end
 
+-- CHOOSE NAMES AND CODE GAME STATE FUNCTION FROM HERE
+-- you can modify init() enter() etc... functions as you need
+
+-- TitleScreenState example class
 TitleScreenState = Class{__includes = BaseState} -- TitleScreenState() function definition, same name as in function init()
 
 function TitleScreenState:update() -- update code for this game state
@@ -172,6 +171,7 @@ function TitleScreenState:render() -- render code for this game state
 	print("premi Up",101,71,15)
 end
 
+-- PalyState example class
 PlayState = Class{__includes = BaseState} -- PlayState() class include BaseState class, same name as in function init()
 
 function PlayState:init() -- class constructor
@@ -201,8 +201,10 @@ function PlayState:render()  -- render code for this game state
 	end
 end
 
+--[[ PART 3 -
+     MAIN PROGRAM ]]--
 
--- init
+-- initialitation
 
 Ball = Class{} -- create the Ball class (the tic80 logo image)
 
@@ -224,9 +226,11 @@ end
 
 function init()
     -- initialize state machine with all state-returning functions
+	
     gStateMachine = StateMachine {
         ['title'] = function() return TitleScreenState() end, -- choose a name for your first game state
         ['play'] = function() return PlayState() end, -- choose a name for your secondo game state
+	-- add how many game states you want and create function in PART2
     }
     gStateMachine:change('title')
 
